@@ -55,6 +55,7 @@ def fetch_all_pages(base_url = url, page_size = PAGE_SIZE, REQUEST_DELAY_SEC = R
 
     return all_records
 
+
 def save_raw(records, output_dir):
     """Save the full record list to a timestamped raw JSON file."""
     os.makedirs(output_dir, exist_ok=True)
