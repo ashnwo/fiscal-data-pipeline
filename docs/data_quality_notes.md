@@ -24,3 +24,5 @@
 
 
 - src_line_nbr column = Bronze-only metadata, not relevant for Silver layer
+
+- Veteran's Day 2023 missing from output
