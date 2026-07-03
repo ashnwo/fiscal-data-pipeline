@@ -7,6 +7,8 @@ from pathlib import Path
 import os
 import time
 
+from s3 import land_raw
+
 url = 'https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v2/accounting/od/debt_to_penny'
 PAGE_SIZE = 10000  # Treasury's max per request
 REQUEST_DELAY_SEC = 0.5  # Polite rate limiting for government API
@@ -64,8 +66,13 @@ def save_raw(records, output_dir):
     with open(output_path, 'w') as f:
         json.dump({'data': records}, f) # Wrap in {'data': [...]} envelope to match original API shape. This means downstream code that does raw['data'] keeps working
 
-
     print(f"Saved {len(records)} records to {output_path}")
+    
+    # S3 raw zone copy below
+    print("Saving to S3 now...")
+    key = land_raw(records)
+    print(f"landed raw pull at s3://{RAW_BUCKET}/{key}")
+
     return output_path
 
 
@@ -79,8 +86,7 @@ def main():
 
     save_raw(records, output_dir)
 
-    print(f"Done. Total records: {len(records)}")
-
+    print(f"Saved to {output_dir}. Total records: {len(records)}")
 
 if __name__ == "__main__":
     main()

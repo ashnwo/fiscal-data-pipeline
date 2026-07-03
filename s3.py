@@ -17,3 +17,29 @@ def build_raw_key(pulled_at: datetime) -> str:
     date_prefix = pulled_at.strftime("year=%Y/month=%m/day=%d")   # today's date
     stamp = pulled_at.strftime("%Y%m%dT%H%M%SZ")                  # HH:MM:SS
     return f"raw/{SOURCE}/{DATASET}/{date_prefix}/pull_{stamp}.json"
+
+
+def land_raw(raw_response, pulled_at: datetime | None = None) -> str:
+    """
+    Write the response to S3 exactly as received.
+    """
+    pulled_at = pulled_at or datetime.now(timezone.utc)
+
+    key = build_raw_key(pulled_at)
+    body = json.dumps(raw_response).encode("utf-8")
+ 
+    s3 = boto3.client("s3")
+    s3.put_object(
+        Bucket=RAW_BUCKET,
+        Key=key,
+        Body=body,
+        ContentType="application/json",
+    )
+    return key
+ 
+ 
+if __name__ == "__main__":
+    raw = {"example": "the untouched API response goes here"}
+
+    key = land_raw(raw)
+    print(f"landed raw pull at s3://{RAW_BUCKET}/{key}")
