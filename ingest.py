@@ -7,7 +7,7 @@ from pathlib import Path
 import os
 import time
 
-from s3 import land_raw
+from s3 import land_raw 
 
 url = 'https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v2/accounting/od/debt_to_penny'
 PAGE_SIZE = 10000  # Treasury's max per request
@@ -70,8 +70,8 @@ def save_raw(records, output_dir):
     
     # S3 raw zone copy below
     print("Saving to S3 now...")
-    key = land_raw(records)
-    print(f"landed raw pull at s3://{RAW_BUCKET}/{key}")
+    land_raw(records)
+    print("S3 Load complete")
 
     return output_path
 

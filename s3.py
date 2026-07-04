@@ -10,6 +10,9 @@ from datetime import datetime, timezone
 import boto3
 from typing import Optional
 
+SOURCE = 'us_treasury'
+DATASET = 'debt_to_penny'    
+RAW_BUCKET = 'treasury-raw-an-2026'
 
 def build_raw_key(pulled_at: datetime) -> str:
     """
