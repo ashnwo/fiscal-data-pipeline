@@ -8,6 +8,8 @@ stored write-once. Everything downstream reads from here, not from the live API 
 import json
 from datetime import datetime, timezone
 import boto3
+from typing import Optional
+
 
 def build_raw_key(pulled_at: datetime) -> str:
     """
@@ -19,7 +21,7 @@ def build_raw_key(pulled_at: datetime) -> str:
     return f"raw/{SOURCE}/{DATASET}/{date_prefix}/pull_{stamp}.json"
 
 
-def land_raw(raw_response, pulled_at: datetime | None = None) -> str:
+def land_raw(raw_response, pulled_at: Optional[datetime] = None) -> str:
     """
     Write the response to S3 exactly as received.
     """
