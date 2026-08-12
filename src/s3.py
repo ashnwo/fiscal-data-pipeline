@@ -41,10 +41,11 @@ def land_raw(raw_response, pulled_at: Optional[datetime] = None) -> str:
         ContentType="application/json",
     )
     return key
- 
- 
+
 if __name__ == "__main__":
     raw = {"example": "the untouched API response goes here"}
 
     key = land_raw(raw)
     print(f"landed raw pull at s3://{RAW_BUCKET}/{key}")
+    
+    # path = f's3a://{RAW_BUCKET}/{key}'
