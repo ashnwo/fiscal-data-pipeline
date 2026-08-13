@@ -76,6 +76,11 @@ def save_raw(records, output_dir):
     return output_path
 
 
+def envelope_records(records):
+    json = {'data': records}
+
+    return json
+
 
 def main():
     today = datetime.now().strftime('%Y%m%d')
@@ -84,9 +89,14 @@ def main():
     print(f"Fetching from {url}")
     records = fetch_all_pages(url)
 
-    save_raw(records, output_dir)
+    # save_raw(records, output_dir)
 
-    print(f"Saved to {output_dir}. Total records: {len(records)}")
+    # print(f"Saved to {output_dir}. Total records: {len(records)}")
+
+    enveloped_records = envelope_records(records)
+
+    return enveloped_records
+
 
 if __name__ == "__main__":
     main()

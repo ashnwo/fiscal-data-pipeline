@@ -30,21 +30,21 @@ def transform(input_uri):
                     )
                 ])
 
-    schema_flat = StructType(
-        [
-            StructField("debt_held_public_amt", StringType()), 
-            StructField("intragov_hold_amt", StringType()), 
-            StructField("tot_pub_debt_out_amt", StringType()), 
-            StructField("record_date", DateType()), 
-            StructField("record_calendar_year", StringType()), 
-            StructField("record_calendar_month", StringType()), 
-            StructField("record_calendar_day", StringType()), 
-            StructField("record_calendar_quarter", StringType()), 
-            StructField("record_fiscal_year", StringType()), 
-            StructField("record_fiscal_quarter", StringType()), 
-            StructField("src_line_nbr", StringType())
-        ]
-    )
+    # schema_flat = StructType(
+    #     [
+    #         StructField("debt_held_public_amt", StringType()), 
+    #         StructField("intragov_hold_amt", StringType()), 
+    #         StructField("tot_pub_debt_out_amt", StringType()), 
+    #         StructField("record_date", DateType()), 
+    #         StructField("record_calendar_year", StringType()), 
+    #         StructField("record_calendar_month", StringType()), 
+    #         StructField("record_calendar_day", StringType()), 
+    #         StructField("record_calendar_quarter", StringType()), 
+    #         StructField("record_fiscal_year", StringType()), 
+    #         StructField("record_fiscal_quarter", StringType()), 
+    #         StructField("src_line_nbr", StringType())
+    #     ]
+    # )
 
 
     print(spark.version)
@@ -55,10 +55,12 @@ def transform(input_uri):
 
     data = input_uri or "s3a://treasury-raw-an-2026/raw/us_treasury/debt_to_penny/year=2026/month=07/day=04/"
 
-    df = spark.read.json(data, schema=schema_flat, mode="FAILFAST", multiLine=True)
+    df = spark.read.json(data, schema=schema, mode="FAILFAST", multiLine=True)
+
+    df.printSchema()
 
 
-    # df = df.select(sf.explode('data').alias('d')).select('d.*')
+    df = df.select(sf.explode('data').alias('d')).select('d.*')
 
     print(df.count())
     df.printSchema()
@@ -137,11 +139,11 @@ def transform(input_uri):
 
     print('input: ', df_typed.count())
 
-    # df_typed.write.mode("overwrite").parquet(s3)
+    df_typed.write.mode("overwrite").parquet(s3)
 
 
     # df_typed.write.partitionBy("year","month","day").mode("overwrite").parquet(s3)
 
-    # reloaded = spark.read.parquet(s3)
-    # reloaded.printSchema()
+    reloaded = spark.read.parquet(s3)
+    reloaded.printSchema()
 
