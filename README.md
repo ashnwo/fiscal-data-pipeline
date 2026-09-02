@@ -15,7 +15,8 @@ from the Fiscal Data API, transforming through a medallion architecture
 - BI: Power BI
 
 ## Status
-Walking skeleton in progress. See `ingest.py` for current state.
+<!-- Walking skeleton in progress. See `ingest.py` for current state. -->
+Current status: Bronze layer complete, Silver in progress
 
 # Architecture Diagram
 ```mermaid

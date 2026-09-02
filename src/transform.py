@@ -115,10 +115,14 @@ def transform(input_uri):
 
     df_typed.printSchema()
 
-    # Counts how many try_cast operations failed for the calendar date columns. # of nulls.
-    df_typed.select([sf.sum(sf.col(c).isNull().cast("int")).alias(c)
-                    for c in ["record_calendar_year","record_calendar_month","record_calendar_day",
-                            "record_calendar_quarter","record_fiscal_year","record_fiscal_quarter"]]).show()
+    # Null alarm; Counts how many try_cast operations failed for the calendar date columns. # of nulls.
+    isolate_nulls = ["record_calendar_year","record_calendar_month","record_calendar_day",
+                            "record_calendar_quarter","record_fiscal_year","record_fiscal_quarter"]
+
+    df_typed.select([
+        sf.sum(sf.col(c).isNull().cast("int")).alias(c)
+        for c in isolate_nulls
+        ]).show()
 
 
     df_typed.select(sf.min("record_date"), sf.max("record_date")).show() # checking record_date range.
